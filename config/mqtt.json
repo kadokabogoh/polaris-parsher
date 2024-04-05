@@ -1,0 +1,12 @@
+{
+  "port": 1883,
+  "host": "mqtt://103.75.237.42",
+  "username": "lora-mqtt",
+  "password": "pdam2021",
+  "keepalive": 60,
+  "reconnectPeriod": 1000,
+  "protocolId": "MQIsdp",
+  "protocolVersion": 3,
+  "clean": true,
+  "encoding": "utf8"
+}

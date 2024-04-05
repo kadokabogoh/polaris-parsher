@@ -1,0 +1,30 @@
+{
+  "name": "polaris-pdam",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "env-cmd -f local.env node index.js",
+    "parser": "node ./modules/parser/index.js"
+  },
+  "author": "Wanda Gusdya",
+  "license": "ISC",
+  "dependencies": {
+    "chalk": "^4.1.2",
+    "env-cmd": "^10.1.0",
+    "fastify": "^3.20.2",
+    "fastify-env": "^2.1.1",
+    "fastify-plugin": "^3.0.0",
+    "mariadb": "^3.0.0",
+    "moment": "^2.29.1",
+    "mqtt": "^4.2.8",
+    "pg": "^8.7.1",
+    "pg-hstore": "^2.3.4",
+    "sequelize": "^6.6.5",
+    "sequelize-fastify": "^1.0.9"
+  },
+  "devDependencies": {
+    "sequelize-cli": "^6.2.0"
+  }
+}
