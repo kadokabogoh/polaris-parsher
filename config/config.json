@@ -1,11 +1,11 @@
 {
 
   "development": {
-    "username": "lora",
-    "password": "PDAM2021!",
+    "username": "root",
+    "password": "",
     "database": "polaris_api_v2",
     "host": "127.0.0.1",
-    "port": "53306",
+    "port": "3306",
     "dialect": "mariadb",
     "dialectOptions": {
         "useUTC": false

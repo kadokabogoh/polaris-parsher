@@ -71,9 +71,13 @@ class Parser {
                 } else if (topic === '/polaris/system/unsubscribe') {
                     const address = String(message)
                     console.log(chalk.yellow('removing device '), address)
-                } else if (topic === "topic") {
-                    const base64 = String(message).replaceAll("\\", "")
-                    const msg = Buffer.from(base64, 'base64').toString('ascii')
+                } else {
+                    const obj = JSON.parse(String(message).replaceAll("\\", ""))
+                    const base64 = obj.payload
+                    const buffer = Buffer.from(base64, 'base64');
+
+                    const msg = buffer.toString('hex');
+                    console.log(chalk.yellow(msg))
                     let i = msg.indexOf("end_device_id")
                     while (i > -1) {
                         let endDeviceId = msg.substring(i + 16)
