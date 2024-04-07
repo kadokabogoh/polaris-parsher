@@ -76,74 +76,65 @@ class Parser {
                     const base64 = obj.payload
                     const buffer = Buffer.from(base64, 'base64');
 
-                    const msg = buffer.toString('hex');
-                    console.log(chalk.yellow(msg))
-                    let i = msg.indexOf("end_device_id")
-                    while (i > -1) {
-                        let endDeviceId = msg.substring(i + 16)
-                        let endDeviceIdIndex = endDeviceId.indexOf('"')
-                        endDeviceId = endDeviceId.substring(0, endDeviceIdIndex)
-                        console.log("end_device_id", endDeviceId)
+                    const payload = buffer.toString('hex');
+                    //let i = msg.hasOwnProperty('end_device_id')
+                    let endDeviceId = obj.end_device_id
+                    console.log("end_device_id", endDeviceId)
 
-                        i = msg.indexOf("payload", i)
-                        let payload = msg.substring(i + 10)
-                        let payloadIndex = payload.indexOf('"')
-                        payload = payload.substring(0, payloadIndex)
+                    //i = msg.indexOf("payload", i)
+                    /*console.log("payload", payload)
 
-                        const raw = atob(payload);
-                        payload = '';
-                        for (let i = 0; i < raw.length; i++) {
-                            const hex = raw.charCodeAt(i).toString(16);
-                            payload += (hex.length === 2 ? hex : '0' + hex);
-                        }
+                    const raw = atob(payload);
+                    payload = '';
+                    for (let i = 0; i < raw.length; i++) {
+                        const hex = raw.charCodeAt(i).toString(16);
+                        payload += (hex.length === 2 ? hex : '0' + hex);
+                    }*/
 
-                        console.log("payload", payload)
+                    console.log("payload", chalk.yellow(payload))
 
-                        const devices = await _this.Device.findAll()
-                        for (let i = 0; i < devices.length; i++) {
-                            const device = devices[i]
-                            console.log(chalk.yellow(device.address), '?', (endDeviceId === device.address))
-                            if (endDeviceId === device.address) {
-                                if (device.model === 'swm') {
-                                    _this.sindconWaterMeter.parse(endDeviceId, payload).then(function (message) {
-                                        message.deviceId = device.id
-                                        _this.SwmMessage.create(message)
-                                    }).catch(function (error) {
-                                        console.log(chalk.red(error))
-                                    })
-                                    console.log(chalk.cyanBright("parsed"))
-                                } else if (device.model === 'swp') {
-                                    _this.sindconWaterPressure.parse(endDeviceId, payload).then(function (message) {
-                                        message.deviceId = device.id
-                                        _this.SwpMessage.create(message)
-                                    }).catch(function (error) {
-                                        console.log(chalk.red(error))
-                                    })
-                                    console.log(chalk.cyanBright("parsed"))
-                                } else if (device.model === 'ci') {
-                                    _this.cybelIncometer.parse(endDeviceId, payload).then(function (message) {
-                                        message.deviceId = device.id
-                                        _this.CiMessage.create(message)
-                                    }).catch(function (error) {
-                                        console.log(chalk.red(error))
-                                    })
-                                    console.log(chalk.cyanBright("parsed"))
-                                } else if (device.model === 'lt') {
-                                    _this.lansitecTracer.parse(endDeviceId, payload).then(function (message) {
-                                        message.deviceId = device.id
-                                        _this.LtMessage.create(message)
-                                    }).catch(function (error) {
-                                        console.log(chalk.red(error))
-                                    })
-                                    console.log(chalk.cyanBright("parsed"))
-                                }
-                                device.lastData = moment().toDate()
-                                await device.save()
+                    const devices = await _this.Device.findAll()
+                    console.log(devices.length)
+                    for (let i = 0; i < devices.length; i++) {
+                        const device = devices[i]
+                        console.log(chalk.yellow(device.address), '?', (endDeviceId === device.address))
+                        if (endDeviceId === device.address) {
+                            if (device.model === 'swm') {
+                                _this.sindconWaterMeter.parse(endDeviceId, payload).then(function (message) {
+                                    message.deviceId = device.id
+                                    _this.SwmMessage.create(message)
+                                }).catch(function (error) {
+                                    console.log(chalk.red(error))
+                                })
+                                console.log(chalk.cyanBright("parsed"))
+                            } else if (device.model === 'swp') {
+                                _this.sindconWaterPressure.parse(endDeviceId, payload).then(function (message) {
+                                    message.deviceId = device.id
+                                    _this.SwpMessage.create(message)
+                                }).catch(function (error) {
+                                    console.log(chalk.red(error))
+                                })
+                                console.log(chalk.cyanBright("parsed"))
+                            } else if (device.model === 'ci') {
+                                _this.cybelIncometer.parse(endDeviceId, payload).then(function (message) {
+                                    message.deviceId = device.id
+                                    _this.CiMessage.create(message)
+                                }).catch(function (error) {
+                                    console.log(chalk.red(error))
+                                })
+                                console.log(chalk.cyanBright("parsed"))
+                            } else if (device.model === 'lt') {
+                                _this.lansitecTracer.parse(endDeviceId, payload).then(function (message) {
+                                    message.deviceId = device.id
+                                    _this.LtMessage.create(message)
+                                }).catch(function (error) {
+                                    console.log(chalk.red(error))
+                                })
+                                console.log(chalk.cyanBright("parsed"))
                             }
+                            device.lastData = moment().toDate()
+                            await device.save()
                         }
-
-
-                        i = msg.indexOf("end_device_id", i)
                     }
                 }
 
