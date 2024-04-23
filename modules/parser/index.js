@@ -9,6 +9,7 @@ const SindconWaterMeter = require('./sindcon-water-meter')
 const SindconWaterPressure = require('./sindcon-water-pressure')
 const CybelIncometer = require('./cybel-incometer')
 const LansitecTracer = require('./lansitec-tracker')
+const DjUltrasonicWaterMeter = require('./dj-ultrasonic-water-meter')
 const moment = require('moment')
 
 class Parser {
@@ -27,6 +28,7 @@ class Parser {
         this.sindconWaterPressure = new SindconWaterPressure()
         this.cybelIncometer = new CybelIncometer()
         this.lansitecTracer = new LansitecTracer()
+        this.djUltrasonicWaterMeter = new DjUltrasonicWaterMeter()
 
         this.mqttOptions = fs.readFileSync(path.join(__dirname, "../../config/mqtt.json"))
         this.mqttOptions = JSON.parse(this.mqttOptions)
@@ -127,6 +129,14 @@ class Parser {
                                 _this.lansitecTracer.parse(endDeviceId, payload).then(function (message) {
                                     message.deviceId = device.id
                                     _this.LtMessage.create(message)
+                                }).catch(function (error) {
+                                    console.log(chalk.red(error))
+                                })
+                                console.log(chalk.cyanBright("parsed"))
+                            } else if (device.model === 'djuwm') {
+                                _this.djUltrasonicWaterMeter.parse(endDeviceId, payload).then(function (message) {
+                                    message.deviceId = device.id
+                                    _this.SwmMessage.create(message)
                                 }).catch(function (error) {
                                     console.log(chalk.red(error))
                                 })
