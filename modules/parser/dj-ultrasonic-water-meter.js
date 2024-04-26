@@ -73,9 +73,9 @@ class DjUltrasonicWaterMeter {
                 {
                     message.valveStatus = "2"
                 }
-                let batteryStatus = payload.substring(25, 26)
-                batteryStatus = parseInt(batteryStatus)
-                message.batteryStatus = (batteryStatus/255)*100                
+                let battery = payload.substring(25, 26)
+                battery = parseInt(battery)
+                message.batteryStatus = (battery/255)*100                
             }
 
             console.log(chalk.white("writing new data"))
