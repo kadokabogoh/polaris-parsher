@@ -56,16 +56,15 @@ class DjUltrasonicWaterMeter {
             }
             if (payload.length > 0 && 12 < payload.length)
             {
-                let meterReading = payload.substring(12, 19)
+                let meterReading = payload.substring(12, 20)
                 meterReading = meterReading.match(/[a-fA-F0-9]{2}/g).reverse().join('')
                 meterReading = parseInt(meterReading)
                 message.meterReading = meterReading/1000
-                let valveStatus = payload.substring(20, 21)
+                let valveStatus = payload.substring(21, 22)
                 message.valveStatus = valveStatus
-                let battery = payload.substring(24, 25)
-                battery = parseInt(battery, 16)
-                message.battery = (battery/255)*100
-                console.log(battery)                
+                let battery = payload.substring(25, 26)
+                battery = Integer.parseInt(battery, 16)
+                message.battery = (battery/255)*100            
             }
 
             console.log(chalk.white("writing new data"))
