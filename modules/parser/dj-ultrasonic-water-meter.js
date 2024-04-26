@@ -54,17 +54,34 @@ class DjUltrasonicWaterMeter {
                 rssi: null,
                 snr: null
             }
-            if (payload.length > 0 && 12 < payload.length)
+            if (payload.length > 12)
             {
                 let meterReading = payload.substring(12, 20)
                 meterReading = meterReading.match(/[a-fA-F0-9]{2}/g).reverse().join('')
                 meterReading = parseInt(meterReading)
-                message.meterReading = meterReading
+                message.meterReading = meterReading/1000
+                let valveStatus = payload.substring(21, 22)
+                if (valveStatus == "00")
+                {
+                    message.valveStatus = "1"
+                }
+                else if ( valveStatus == "01")
+                {
+                    message.valveStatus = "0"
+                }
+                else 
+                {
+                    message.valveStatus = "2"
+                }
+                let batteryStatus = payload.substring(25, 26)
+                batteryStatus = parseInt(batteryStatus)
+                message.batteryStatus = (batteryStatus/255)*100                
             }
 
             console.log(chalk.white("writing new data"))
             console.log(chalk.blue(JSON.stringify(message)))
             return message
+            
         } else
         {
             console.log(chalk.yellow('cannot parse '), chalk.yellow(payload))
