@@ -60,15 +60,8 @@ class DjUltrasonicWaterMeter {
                 meterReading = meterReading.match(/[a-fA-F0-9]{2}/g).reverse().join('')
                 meterReading = parseInt(meterReading)
                 message.meterReading = meterReading/1000
-                let valveStatus = payload.substring(22, 23)
-                if (valveStatus == "00")
-                {
-                    message.valveStatus = "1"
-                }
-                else
-                {
-                    message.valveStatus = "0"
-                }
+                let valveStatus = payload.substring(20, 21)
+                message.valveStatus = valveStatus
                 let battery = payload.substring(24, 25)
                 battery = parseInt(battery)
                 message.battery = (battery/255)*100
